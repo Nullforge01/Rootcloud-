@@ -22,7 +22,6 @@ function contentTypeFor(filename) {
 
 export async function GET(request, { params }) {
   const { slug, path } = params;
-  // No sub-path -> serve index.html by default (like any static host)
   const filePath = path && path.length ? path.join('/') : 'index.html';
 
   const supabase = supabaseServer();
@@ -42,4 +41,4 @@ export async function GET(request, { params }) {
   return new Response(bytes, {
     headers: { 'Content-Type': contentTypeFor(filePath) },
   });
-  
+}
