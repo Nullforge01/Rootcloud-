@@ -37,4 +37,4 @@ export async function GET(request, { params }) {
   } catch (error) {
     return new Response(`Error: ${error.message}`, { status: 500 });
   }
-}
+                        }
