@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>rootcloud — host your site in seconds</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+  :root{
+    --bg: #FBFAF7;
+    --surface: #FFFFFF;
+    --border: #E8E5DC;
+    --text: #26251F;
+    --muted: #7A776E;
+    --accent: #3D82F7;
+    --accent-soft: #EAF1FE;
+    --accent-hover: #2E6FE0;
+    --radius: 16px;
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a{ color:inherit; text-decoration:none; }
+
+  .wrap{
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ---------- Nav ---------- */
+  nav{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding: 26px 0;
+  }
+  .logo{
+    font-weight:800;
+    font-size: 18px;
+  }
+  .logo span{ color: var(--accent); }
+
+  .nav-cta{
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    text-align:center;
+    padding: 48px 0 40px;
+  }
+
+  .badge{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    background: var(--accent-soft);
+    color: var(--accent-hover);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 7px 14px;
+    border-radius: 999px;
+    margin-bottom: 22px;
+  }
+  .badge .dot{
+    width:6px; height:6px; border-radius:50%;
+    background: var(--accent);
+  }
+
+  h1{
+    font-size: clamp(32px, 5.5vw, 48px);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin: 0 0 16px;
+    font-weight: 800;
+  }
+
+  .subtitle{
+    color: var(--muted);
+    font-size: 17px;
+    max-width: 460px;
+    margin: 0 auto 30px;
+    line-height: 1.55;
+  }
+
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 14px 26px;
+    border-radius: 999px;
+    cursor:pointer;
+    border: none;
+    transition: transform .12s ease, background .12s ease;
+  }
+  .btn:active{ transform: scale(0.97); }
+
+  .btn-primary{
+    background: var(--accent);
+    color: #fff;
+  }
+  .btn-primary:hover{ background: var(--accent-hover); }
+
+  .btn-primary[disabled]{
+    background: #D8D5CB;
+    color: #9A978C;
+    cursor: not-allowed;
+  }
+
+  /* ---------- Dashboard card ---------- */
+  .card{
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 36px;
+    box-shadow: 0 20px 50px -30px rgba(30,25,10,0.15);
+    margin-bottom: 60px;
+  }
+
+  .card h2{
+    font-size: 21px;
+    margin: 0 0 6px;
+  }
+  .card > p{
+    color: var(--muted);
+    font-size: 14.5px;
+    margin: 0 0 24px;
+  }
+
+  .dropzone{
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 42px 20px;
+    text-align:center;
+    cursor:pointer;
+    transition: border-color .12s ease, background .12s ease;
+  }
+  .dropzone.drag{
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+  .dropzone input{ display:none; }
+
+  .dz-emoji{ font-size: 30px; margin-bottom: 10px; }
+  .dz-main{ font-size: 15.5px; font-weight: 600; margin-bottom: 4px; }
+  .dz-sub{ font-size: 13px; color: var(--muted); }
+  .dz-sub .link{ color: var(--accent); font-weight:600; }
+
+  .filelist{
+    margin-top: 16px;
+    display:flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .file-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding: 12px 16px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-size: 14px;
+  }
+  .file-row .fname{ font-weight: 500; }
+  .file-row .fsize{ color: var(--muted); font-size: 13px; }
+  .file-row .remove{
+    background:none; border:none; color: var(--muted);
+    cursor:pointer; font-size:16px; padding: 2px 6px;
+  }
+  .file-row .remove:hover{ color: var(--text); }
+
+  .deploy-row{
+    margin-top: 22px;
+    display:flex;
+    align-items:center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .deploy-note{ font-size: 13.5px; color: var(--muted); }
+
+  .error{
+    color: #B91C1C;
+    font-size: 13.5px;
+    margin-top: 12px;
+    display: none;
+  }
+  .error.show{ display:block; }
+
+  .result{
+    margin-top: 18px;
+    padding: 16px 18px;
+    background: var(--accent-soft);
+    border-radius: 14px;
+    display:none;
+    align-items:center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .result.show{ display:flex; }
+  .result .url{
+    color: var(--accent-hover);
+    font-weight: 600;
+    font-size: 14.5px;
+    word-break: break-all;
+  }
+  .copy-btn{
+    font-size: 13px;
+    font-weight: 600;
+    background: #fff;
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 8px 16px;
+    border-radius: 999px;
+    cursor:pointer;
+  }
+  .copy-btn:hover{ border-color: var(--accent); }
+
+  /* ---------- Footer ---------- */
+  footer{
+    border-top: 1px solid var(--border);
+    padding: 24px 0 40px;
+    text-align:center;
+  }
+  .foot-studio{
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .foot-studio span{ color: var(--accent); font-weight:600; }
+
+  :focus-visible{
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav>
+    <div class="logo">root<span>cloud</span></div>
+    <a href="#deploy" class="nav-cta">Get started</a>
+  </nav>
+
+  <section class="hero">
+    <div class="badge"><span class="dot"></span> Free hosting, no account needed</div>
+    <h1>Put your site online<br>in a few clicks.</h1>
+    <p class="subtitle">Drop in your files, hit deploy, and get a link you can share right away. No servers to set up, no config to fight with.</p>
+    <a href="#deploy" class="btn btn-primary">Start deploying →</a>
+  </section>
+
+  <section class="wrap" id="deploy" style="padding:0;">
+    <div class="card">
+      <h2>Upload your site</h2>
+      <p>Add your HTML, CSS, and JS files below. Include an <code>index.html</code> so it loads right away.</p>
+
+      <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Upload files">
+        <input type="file" id="fileInput" multiple>
+        <div class="dz-emoji">📁</div>
+        <div class="dz-main">Drag files here</div>
+        <div class="dz-sub">or <span class="link">click to browse</span></div>
+      </div>
+
+      <div class="filelist" id="fileList"></div>
+
+      <div class="deploy-row">
+        <button class="btn btn-primary" id="deployBtn" disabled>Deploy site</button>
+        <span class="deploy-note" id="fileCount"></span>
+      </div>
+
+      <p class="error" id="errorMsg"></p>
+
+      <div class="result" id="result">
+        <a class="url" id="resultUrl" target="_blank" rel="noreferrer"></a>
+        <button class="copy-btn" id="copyBtn">Copy link</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="foot-studio">Made by <span>Wild Lirt Studio</span></div>
+</footer>
+
+<script>
+  const dropzone = document.getElementById('dropzone');
+  const fileInput = document.getElementById('fileInput');
+  const fileList = document.getElementById('fileList');
+  const deployBtn = document.getElementById('deployBtn');
+  const fileCount = document.getElementById('fileCount');
+  const errorMsg = document.getElementById('errorMsg');
+  const result = document.getElementById('result');
+  const resultUrl = document.getElementById('resultUrl');
+  const copyBtn = document.getElementById('copyBtn');
+
+  let files = [];
+
+  function formatSize(bytes){
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+  }
+
+  function renderFiles(){
+    fileList.innerHTML = '';
+    files.forEach((f, idx) => {
+      const row = document.createElement('div');
+      row.className = 'file-row';
+      row.innerHTML = `
+        <span>${f.webkitRelativePath || f.name}</span>
+        <span style="display:flex; align-items:center; gap:14px;">
+          <span class="fsize">${formatSize(f.size)}</span>
+          <button class="remove" aria-label="Remove ${f.name}" data-idx="${idx}">×</button>
+        </span>`;
+      fileList.appendChild(row);
+    });
+    fileCount.textContent = files.length
+      ? `${files.length} file${files.length > 1 ? 's' : ''} ready to deploy`
+      : '';
+    deployBtn.disabled = files.length === 0;
+    result.classList.remove('show');
+    errorMsg.classList.remove('show');
+  }
+
+  function addFiles(fileArr){
+    files = files.concat(Array.from(fileArr));
+    renderFiles();
+  }
+
+  dropzone.addEventListener('click', () => fileInput.click());
+  dropzone.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') fileInput.click();
+  });
+  fileInput.addEventListener('change', e => addFiles(e.target.files));
+
+  ['dragover', 'dragenter'].forEach(evt =>
+    dropzone.addEventListener(evt, e => {
+      e.preventDefault();
+      dropzone.classList.add('drag');
+    })
+  );
+  ['dragleave', 'drop'].forEach(evt =>
+    dropzone.addEventListener(evt, e => {
+      e.preventDefault();
+      dropzone.classList.remove('drag');
+    })
+  );
+  dropzone.addEventListener('drop', e => {
+    if (e.dataTransfer.files.length) addFiles(e.dataTransfer.files);
+  });
+
+  fileList.addEventListener('click', e => {
+    if (e.target.matches('.remove')){
+      const idx = Number(e.target.dataset.idx);
+      files.splice(idx, 1);
+      renderFiles();
+    }
+  });
+
+  deployBtn.addEventListener('click', async () => {
+    deployBtn.disabled = true;
+    deployBtn.textContent = 'Deploying...';
+    errorMsg.classList.remove('show');
+    result.classList.remove('show');
+
+    try {
+      const formData = new FormData();
+      files.forEach(f => formData.append('files', f));
+
+      const res = await fetch('/api/deploy', { method: 'POST', body: formData });
+      const data = await res.json();
+
+      if (!res.ok) {
+        errorMsg.textContent = data.error || 'Something went wrong deploying your site.';
+        errorMsg.classList.add('show');
+      } else {
+        const url = `${window.location.origin}/s/${data.slug}`;
+        resultUrl.textContent = url;
+        resultUrl.href = url;
+        result.classList.add('show');
+      }
+    } catch (err) {
+      errorMsg.textContent = 'Could not reach the server. Try again.';
+      errorMsg.classList.add('show');
+    } finally {
+      deployBtn.textContent = 'Deploy site';
+      deployBtn.disabled = files.length === 0;
+    }
+  });
+
+  copyBtn.addEventListener('click', () => {
+    navigator.clipboard.writeText(resultUrl.href);
+    copyBtn.textContent = 'Copied!';
+    setTimeout(() => copyBtn.textContent = 'Copy link', 1400);
+  });
+</script>
+
+</body>
+</html
